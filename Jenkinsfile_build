@@ -1,0 +1,40 @@
+pipeline {
+    agent {
+        kubernetes {
+            label 'jnlp'
+            defaultContainer 'jnlp'
+        }
+    }
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
+        KUBECONFIG_CREDENTIALS = credentials('kubeconfig-credentials-id')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ardaakkiz/app.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                container('jnlp') {
+                    script {
+                        docker.build("ardaakkiz/sample-java-app:${env.BUILD_ID}", "--platform linux/amd64 .")
+                    }
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                container('jnlp') {
+                    script {
+                        docker.withRegistry('https://index.docker.io/v1/', 'DOCKERHUB_CREDENTIALS') {
+                            docker.image("ardaakkiz/sample-java-app:${env.BUILD_ID}").push()
+                            docker.image("ardaakkiz/sample-java-app:${env.BUILD_ID}").push('latest')
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

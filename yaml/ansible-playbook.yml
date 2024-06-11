@@ -1,0 +1,9 @@
+- name: Deploy Java App
+  hosts: localhost
+  tasks:
+    - name: Apply Kubernetes manifests
+      command: kubectl apply -f {{ item }}
+      with_items:
+        - yaml/java-app-deployment.yaml
+        - yaml/java-app-service.yaml
+        - yaml/hpa.yaml
