@@ -6,22 +6,18 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                dir('deployment-directory') {
-                    git branch: 'main', url: 'https://github.com/ardaakkiz/app.git'
-                }
+                git 'https://github.com/ardaakkiz/app.git'
             }
         }
         stage('Deploy') {
             steps {
-                dir('deployment-directory') {
-                    withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBE_TOKEN')]) {
-                        sh '''
-                            kubectl config set-credentials jenkins --token=$KUBE_TOKEN
-                            kubectl config set-context jenkins --cluster=kubernetes --user=jenkins
-                            kubectl config use-context jenkins
-                            ansible-playbook ansible-playbook.yml
-                        '''
-                    }
+                withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBE_TOKEN')]) {
+                    sh '''
+                        kubectl config set-credentials jenkins --token=$KUBE_TOKEN
+                        kubectl config set-context jenkins --cluster=kubernetes --user=jenkins
+                        kubectl config use-context jenkins
+                        ansible-playbook ansible-playbook.yml
+                    '''
                 }
             }
         }

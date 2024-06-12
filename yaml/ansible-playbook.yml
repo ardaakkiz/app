@@ -6,4 +6,5 @@
       with_items:
         - yaml/java-app-deployment.yaml
         - yaml/java-app-service.yaml
+        - yaml/ingress.yaml
         - yaml/hpa.yaml
