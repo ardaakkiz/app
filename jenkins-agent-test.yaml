@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-agent-test
+  namespace: jenkins
+spec:
+  containers:
+  - name: jnlp
+    image: jenkins/inbound-agent:latest
+    command: ['/bin/sh', '-c']
+    args: ['cat']
+    tty: true
