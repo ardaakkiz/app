@@ -1,26 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            yaml """
-                apiVersion: v1
-                kind: Pod
-                metadata:
-                labels:
-                    some-label: some-value
-                spec:
-                containers:
-                - name: jnlp
-                    image: jenkins/inbound-agent:latest
-                    args: ['$(JENKINS_SECRET)', '$(JENKINS_NAME)']
-                    tty: true
-                - name: docker
-                    image: docker:19.03.12
-                    command:
-                    - cat
-                    tty: true
-                """
-        }
-    }
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
     }
@@ -32,7 +11,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                container('jnlp') {
+                container('docker') {
                     script {
                         docker.build("ardaakkiz/sample-java-app:${env.BUILD_ID}", "--platform linux/amd64 .")
                     }
@@ -41,7 +20,7 @@ pipeline {
         }
         stage('Push Docker Image') {
             steps {
-                container('jnlp') {
+                container('docker') {
                     script {
                         docker.withRegistry('https://index.docker.io/v1/', 'DOCKERHUB_CREDENTIALS') {
                             docker.image("ardaakkiz/sample-java-app:${env.BUILD_ID}").push()
