@@ -1,5 +1,26 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: some-value
+spec:
+  containers:
+  - name: jnlp
+    image: jenkins/inbound-agent:latest
+    args: ['$(JENKINS_SECRET)', '$(JENKINS_NAME)']
+    tty: true
+  - name: docker
+    image: docker:19.03.12
+    command:
+    - cat
+    tty: true
+"""
+        }
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
     }
