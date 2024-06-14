@@ -15,25 +15,25 @@ spec:
     spec:
       containers:
       - name: jenkins
-        image: jenkins/jenkins:lts
-        securityContext:
-          privileged: true # Allow running as privileged
+        image: your-dockerhub-username/jenkins-with-docker
         ports:
         - containerPort: 8080
         - containerPort: 50000
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
         volumeMounts:
         - name: docker-socket
           mountPath: /var/run/docker.sock
-        - name: docker-binary
-          mountPath: /usr/bin/docker
         - name: jenkins-home
           mountPath: /var/jenkins_home
       volumes:
       - name: docker-socket
         hostPath:
           path: /var/run/docker.sock
-      - name: docker-binary
-        hostPath:
-          path: /usr/bin/docker
       - name: jenkins-home
         emptyDir: {}
