@@ -16,7 +16,7 @@ pipeline {
                     sh '''
                         aws eks update-kubeconfig --name dream-final-cluster --region us-east-1
                         kubectl get nodes
-                        ansible-playbook ansible-playbook.yml --check
+                        ansible-playbook ansible-playbook.yml 
                     '''
                 }
             }
