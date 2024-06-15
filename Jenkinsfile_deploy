@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        KUBECONFIG_CREDENTIALS = credentials('kubeconfig-credentials-id')
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
     }
     stages {
         stage('Checkout') {
@@ -11,12 +12,11 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                withCredentials([string(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBE_TOKEN')]) {
+                withEnv(["AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}", "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}"]) {
                     sh '''
-                        kubectl config set-credentials jenkins --token=$KUBE_TOKEN
-                        kubectl config set-context jenkins --cluster=kubernetes --user=jenkins
-                        kubectl config use-context jenkins
-                        ansible-playbook ansible-playbook.yml
+                        aws eks update-kubeconfig --name dream-final-cluster --region us-east-1
+                        kubectl get nodes
+                        ansible-playbook ansible-playbook.yml --check
                     '''
                 }
             }
