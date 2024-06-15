@@ -20,4 +20,4 @@ spec:
         - containerPort: 5601
         env:
         - name: ELASTICSEARCH_HOSTS
-          value: "http://elasticsearch-service.logging.svc.cluster.local:9200"
+          value: "afe1fb8b9869c4fc6b40ca8e4f962fce-942632835.us-east-1.elb.amazonaws.com:9200"
