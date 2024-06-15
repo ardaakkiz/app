@@ -4,7 +4,7 @@
     - name: Apply Kubernetes manifests
       command: kubectl apply -f {{ item }}
       with_items:
-        - yaml/java-app-deployment.yaml
-        - yaml/java-app-service.yaml
-        - yaml/ingress.yaml
-        - yaml/hpa.yaml
+        - k8s-manifests/java-app-deployment.yaml
+        - k8s-manifests/java-app-service.yaml
+        - k8s-manifests/ingress.yaml
+        - k8s-manifests/hpa.yaml
