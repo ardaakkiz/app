@@ -20,16 +20,16 @@ spec:
         - containerPort: 5601
         env:
         - name: ELASTICSEARCH_HOSTS
-          value: "http://afe1fb8b9869c4fc6b40ca8e4f962fce-942632835.us-east-1.elb.amazonaws.com:9200"
+          value: "http://elasticsearch-service.logging.svc.cluster.local:9200"
         - name: ELASTICSEARCH_USERNAME
           valueFrom:
             secretKeyRef:
-              name: kibana-credentials
+              name: elasticsearch-credentials
               key: username
         - name: ELASTICSEARCH_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: kibana-credentials
+              name: elasticsearch-credentials
               key: password
         volumeMounts:
         - name: kibana-config

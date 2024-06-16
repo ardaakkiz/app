@@ -1,0 +1,12 @@
+alertmanager:
+  enabled: true
+  persistentVolume:
+    enabled: true
+    size: 2Gi
+    storageClass: gp2
+
+server:
+  persistentVolume:
+    enabled: true
+    size: 8Gi
+    storageClass: gp2

@@ -4,14 +4,6 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
     }
     stages {
-        stage('Print Env') {
-            steps {
-                script {
-                    echo "DOCKERHUB USER: ${DOCKERHUB_CREDENTIALS_USR}"
-                    echo "DOCKERHUB PASSWORD: ${DOCKERHUB_CREDENTIALS_PSW}"
-                }
-            }
-        }
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/ardaakkiz/app.git'

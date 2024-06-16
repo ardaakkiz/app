@@ -12,6 +12,16 @@ data:
 
     # Enable security features
     xpack.security.enabled: true
+    xpack.security.authc.providers:
+      basic.basic1:
+        order: 0
     xpack.security.encryptionKey: "YAvmEXL12d9oOlDem+xExEHmCM2ZCiNexwUEeMpeGoA="
+    xpack.encryptedSavedObjects.encryptionKey: "YAvmEXL12d9oOlDem+xExEHmCM2ZCiNexwUEeMpeGoA="
+    xpack.reporting.encryptionKey: "YAvmEXL12d9oOlDem+xExEHmCM2ZCiNexwUEeMpeGoA="
     xpack.security.session.idleTimeout: "1h"
     xpack.security.session.lifespan: "8h"
+
+     # Enable security features
+    elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca.crt"]
+    elasticsearch.username: "kibana_system"
+    elasticsearch.password: "${ELASTICSEARCH_PASSWORD}"

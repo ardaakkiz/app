@@ -27,10 +27,16 @@ spec:
               name: elasticsearch-credentials
               key: password
         volumeMounts:
+        - name: elasticsearch-certs
+          mountPath: /usr/share/elasticsearch/config/certs
+          readOnly: true
         - name: elasticsearch-config
           mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
           subPath: elasticsearch.yml
       volumes:
+      - name: elasticsearch-certs
+        secret:
+          secretName: elasticsearch-certs
       - name: elasticsearch-config
         configMap:
           name: elasticsearch-config
