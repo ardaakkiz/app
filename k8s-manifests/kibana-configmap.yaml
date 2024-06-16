@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kibana-config
+  namespace: logging
+data:
+  kibana.yml: |
+    server.name: kibana
+    server.host: "0"
+    elasticsearch.hosts: [ "http://elasticsearch-service.logging.svc.cluster.local:9200" ]
+    monitoring.ui.container.elasticsearch.enabled: true
+
+    # Enable security features
+    xpack.security.enabled: true
+    xpack.security.encryptionKey: "YAvmEXL12d9oOlDem+xExEHmCM2ZCiNexwUEeMpeGoA="
+    xpack.security.session.idleTimeout: "1h"
+    xpack.security.session.lifespan: "8h"
