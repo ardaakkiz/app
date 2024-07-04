@@ -1,5 +1,28 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            label 'jenkins-agent'
+            yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins/label: jenkins-agent
+spec:
+  containers:
+  - name: jnlp
+    image: jenkinsci/jnlp-agent-docker:latest
+    args: ["jenkins-slave"]
+    volumeMounts:
+    - name: docker-socket
+      mountPath: /var/run/docker.sock
+  volumes:
+  - name: docker-socket
+    hostPath:
+      path: /var/run/docker.sock
+"""
+        }
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
     }
