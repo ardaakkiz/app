@@ -1,26 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            yaml """
-            apiVersion: v1
-            kind: Pod
-            spec:
-              containers:
-              - name: docker
-                image: docker:20.10.9
-                command:
-                - cat
-                tty: true
-                volumeMounts:
-                - name: docker-sock
-                  mountPath: /var/run/docker.sock
-              volumes:
-              - name: docker-sock
-                hostPath:
-                  path: /var/run/docker.sock
-            """
-        }
-    }
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
     }
@@ -32,21 +11,17 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                container('docker') {
-                    script {
-                        docker.build("ardaakkiz/sample-java-app:${env.BUILD_ID}", "--platform linux/amd64 .")
-                    }
+                script {
+                    docker.build("ardaakkiz/sample-java-app:${env.BUILD_ID}", "--platform linux/amd64 .")
                 }
             }
         }
         stage('Push Docker Image') {
             steps {
-                container('docker') {
-                    script {
-                        docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials-id') {
-                            docker.image("ardaakkiz/sample-java-app:${env.BUILD_ID}").push()
-                            docker.image("ardaakkiz/sample-java-app:${env.BUILD_ID}").push('latest')
-                        }
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials-id') {
+                        docker.image("ardaakkiz/sample-java-app:${env.BUILD_ID}").push()
+                        docker.image("ardaakkiz/sample-java-app:${env.BUILD_ID}").push('latest')
                     }
                 }
             }
