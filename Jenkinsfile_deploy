@@ -30,23 +30,6 @@ pipeline {
 
                     # Verify kubectl installation
                     /usr/local/bin/kubectl version --client
-
-                    # Update package lists and install python3-venv
-                    apt-get update
-                    apt-get install -y python3-venv python3-pip
-
-                    # Create a virtual environment for Ansible
-                    python3 -m venv ansible-env
-                    source ansible-env/bin/activate
-
-                    # Install Ansible in the virtual environment
-                    pip install ansible
-
-                    # Verify Ansible installation
-                    ansible-playbook --version
-
-                    # Deactivate the virtual environment
-                    deactivate
                 '''
             }
         }
@@ -56,18 +39,14 @@ pipeline {
                     sh '''
                         #!/bin/bash
 
-                        # Activate the virtual environment
-                        source ansible-env/bin/activate
-
                         # Configure AWS and Kubernetes
                         aws eks update-kubeconfig --name production-cluster --region us-east-1
                         kubectl get nodes
 
-                        # Run the Ansible playbook
-                        ansible-playbook ansible-playbook.yml 
-
-                        # Deactivate the virtual environment
-                        deactivate
+                        # Apply Kubernetes manifests
+                        kubectl apply -f k8s-manifests/java-app-deployment.yaml
+                        kubectl apply -f k8s-manifests/java-app-service.yaml
+                        kubectl apply -f k8s-manifests/hpa.yaml
                     '''
                 }
             }
