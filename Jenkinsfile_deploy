@@ -35,7 +35,7 @@ pipeline {
             steps {
                 withEnv(["AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}", "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}"]) {
                     sh '''
-                        aws eks update-kubeconfig --name dream-final-cluster --region us-east-1
+                        aws eks update-kubeconfig --name production-cluster --region us-east-1
                         kubectl get nodes
                         ansible-playbook ansible-playbook.yml 
                     '''
