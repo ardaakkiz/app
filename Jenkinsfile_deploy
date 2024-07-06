@@ -28,6 +28,13 @@ pipeline {
 
                     # Verify kubectl installation
                     /usr/local/bin/kubectl version --client
+
+                    # Install Ansible
+                    apk add --no-cache python3 py3-pip
+                    pip3 install ansible
+
+                    # Verify Ansible installation
+                    ansible-playbook --version
                 '''
             }
         }
