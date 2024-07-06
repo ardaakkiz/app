@@ -10,11 +10,26 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/ardaakkiz/app.git'
             }
         }
+        stage('Install Tools') {
+            steps {
+                sh '''
+                    # Install AWS CLI
+                    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                    unzip awscliv2.zip
+                    sudo ./aws/install
+
+                    # Install kubectl
+                    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                    chmod +x kubectl
+                    sudo mv kubectl /usr/local/bin/
+                '''
+            }
+        }
         stage('Deploy') {
             steps {
                 withEnv(["AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}", "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}"]) {
                     sh '''
-                        aws eks update-kubeconfig --name production-cluster --region us-east-1
+                        aws eks update-kubeconfig --name dream-final-cluster --region us-east-1
                         kubectl get nodes
                         ansible-playbook ansible-playbook.yml 
                     '''
