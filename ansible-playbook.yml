@@ -6,5 +6,5 @@
       with_items:
         - k8s-manifests/java-app-deployment.yaml
         - k8s-manifests/java-app-service.yaml
-        - k8s-manifests/ingress.yaml
+        # - k8s-manifests/ingress.yaml
         - k8s-manifests/hpa.yaml
