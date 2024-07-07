@@ -4,6 +4,18 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
     }
     stages {
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh '''
+                    #!/bin/bash
+                    # Update and install dependencies
+                    sudo apt-get update -y
+                    sudo apt-get install -y apt-utils
+                    '''
+                }
+            }
+        }
         stage('Install Docker') {
             steps {
                 script {
@@ -11,6 +23,8 @@ pipeline {
                     #!/bin/bash
                     # Install Docker
                     if ! command -v docker &> /dev/null; then
+                        sudo apt-get update -y
+                        sudo apt --fix-broken install -y
                         curl -fsSL https://get.docker.com -o get-docker.sh
                         sh get-docker.sh
                         rm get-docker.sh
