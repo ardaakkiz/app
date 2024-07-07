@@ -4,6 +4,21 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
     }
     stages {
+        stage('Install Docker') {
+            steps {
+                script {
+                    sh '''
+                    #!/bin/bash
+                    # Install Docker
+                    if ! command -v docker &> /dev/null; then
+                        curl -fsSL https://get.docker.com -o get-docker.sh
+                        sh get-docker.sh
+                        rm get-docker.sh
+                    fi
+                    '''
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/ardaakkiz/app.git'
