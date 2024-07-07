@@ -8,10 +8,9 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    #!/bin/bash
                     # Update and install dependencies
-                    sudo apt-get update -y
-                    sudo apt-get install -y apt-utils
+                    apt-get update -y
+                    apt-get install -y apt-utils
                     '''
                 }
             }
@@ -20,11 +19,10 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    #!/bin/bash
                     # Install Docker
                     if ! command -v docker &> /dev/null; then
-                        sudo apt-get update -y
-                        sudo apt --fix-broken install -y
+                        apt-get update -y
+                        apt --fix-broken install -y
                         curl -fsSL https://get.docker.com -o get-docker.sh
                         sh get-docker.sh
                         rm get-docker.sh
