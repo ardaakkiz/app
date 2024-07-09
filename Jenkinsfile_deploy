@@ -40,7 +40,7 @@ pipeline {
                         #!/bin/bash
 
                         # Configure AWS and Kubernetes
-                        aws eks update-kubeconfig --name production-cluster --region us-east-1
+                        aws eks update-kubeconfig --name dream-games --region us-east-1
                         kubectl get nodes
 
                         # Apply Kubernetes manifests
